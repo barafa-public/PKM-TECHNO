@@ -1,0 +1,25 @@
+Options -Indexes
+Options -FollowSymLinks
+
+# Proteksi file sensitif
+<FilesMatch "\.(sql|md|log|env)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Proteksi folder includes
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^includes/ - [F,L]
+</IfModule>
+
+# Header keamanan
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Redirect ke login jika belum ada session (handled by PHP)
+DirectoryIndex index.php
